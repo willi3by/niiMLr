@@ -1,18 +1,24 @@
 Package: niiMLr
-Title: What the Package Does (One Line, Title Case)
+Title: Contains Functions to Create ML Models with Neuroimaging Data
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Brady",
+           family = "Williamson",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+           email = "willi3by@ucmail.uc.edu",
+           comment = c(ORCID = "https://orcid.org/0000-0002-1161-402X"))
+Description: This package builds and runs 3+ dimensional ML models for neuroimaging data.
+    It also contains functions to interpret (3d Grad CAM), preprocess, and manipulate data.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/willi3by/niiMLr
 BugReports: https://github.com/willi3by/niiMLr/issues
+Imports: 
+    keras,
+    tensorflow,
+    reticulate,
+    tfdatasets,
+    tfaddons
