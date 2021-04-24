@@ -1,9 +1,9 @@
 #' Clever score on l2 norm for binary classification with sigmoid activation.
 #'
-#' @param path_to_weights
+#' @param path_to_weights Absolute path to model weights.
 #' @param model_params List of model parameters.
-#' @param model_build_fn
-#' @param x_test
+#' @param model_build_fn Function to build model.
+#' @param x_test Examples on which to calculate score.
 #'
 #' @return Lit of clever score for each test example.
 #' @export

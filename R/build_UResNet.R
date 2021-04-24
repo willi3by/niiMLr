@@ -1,32 +1,15 @@
-#' Function to define dice loss for networks
-#'
-#' @param y_true
-#' @param y_pred
-#'
-#' @return
-#' @export
-#'
-#' @examples
-dice_loss <- function(y_true, y_pred){
-
-  numerator <- 2 * tensorflow::tf$reduce_sum(y_true * y_pred, axis=c(1,2,3))
-  denominator <- tensorflow::tf$reduce_sum(y_true + y_pred, axis=c(1,2,3))
-
-  return(tensorflow::tf$reshape(1-numerator / denominator, c(-1,1,1)))
-}
-
 #' Build Residual U-Net
 #'
-#' @param image_shape The x,y,z dimensions must be even numbers.
-#' @param batch_size
+#' @param model_params Model params list, must add batch size when making list.
+#' Also, x,y,z dims of input_shape must be even.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-build_UResNet <- function(image_shape, batch_size){
+build_UResNet <- function(model_params){
 
-  inputs <- keras::layer_input(batch_shape = c(batch_size, image_shape))
+  inputs <- keras::layer_input(batch_shape = c(model_params$batch_size, model_params$input_shape))
 
   conv1 <- inputs %>%
     keras::layer_conv_3d(filters = 64, kernel_size = c(7,7,7), strides = c(2,2,1), padding = "same", use_bias = F) %>%
@@ -94,10 +77,10 @@ build_UResNet <- function(image_shape, batch_size){
 
   conv10 <- conv9 %>%
     keras::layer_upsampling_3d(size = c(2,2,1)) %>%
-    keras::layer_conv_3d(filters = 1,kernel_size = 1, strides = 1, activation = "sigmoid")
+    keras::layer_conv_3d(filters = 1,kernel_size = 1, strides = 1, activation = model_params$activation)
 
   model <- keras::keras_model(inputs, conv10) %>%
-    keras::compile(optimizer = keras::optimizer_adam(lr=0.0001), loss = dice_loss)
+    keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
 
   return(model)
 
