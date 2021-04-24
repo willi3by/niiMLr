@@ -9,21 +9,21 @@ residual_layer_decode <- keras::Layer(
   },
   build = function(input_shape){
     self$main_layers <- list(
-      layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = 1,
+      keras::layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = 1,
                               padding = 'same', use_bias = F),
-      layer_batch_normalization(),
-      layer_activation_relu(),
-      layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = self$strides,
+      keras::layer_batch_normalization(),
+      keras::layer_activation_relu(),
+      keras::layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = self$strides,
                               padding = 'same', use_bias = F),
-      layer_batch_normalization()
+      keras::layer_batch_normalization()
     )
 
     self$skip_layers <- list()
     if(self$strides > 1){
       self$skip_layers <- list(
-        layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = self$strides,
-                                padding = 'same', use_bias = F, kernel_regularizer = regularizer_l2(0.2)),
-        layer_batch_normalization()
+        keras::layer_conv_3d_transpose(filters = self$filters, kernel_size = c(3,3,3), strides = self$strides,
+                                padding = 'same', use_bias = F, kernel_regularizer = keras::regularizer_l2(0.2)),
+        keras::layer_batch_normalization()
       )
     }
   },
@@ -38,6 +38,6 @@ residual_layer_decode <- keras::Layer(
       skip_Z <- self$skip_layers[[i]](skip_Z)
     }
     print("Adding layers")
-    return(activation_relu(Z + skip_Z))
+    return(keras::activation_relu(Z + skip_Z))
   }
 )

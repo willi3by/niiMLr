@@ -21,4 +21,6 @@ Imports:
     tensorflow,
     reticulate,
     tfdatasets,
-    tfaddons
+    tfaddons,
+    caret,
+    magrittr

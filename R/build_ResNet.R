@@ -7,7 +7,7 @@
 #'
 #' @examples
 #' resnet <- build_ResNet(input_shape, num_classes, loss, optimizer, metrics = c("accuracy"))
-build_ResNet <- function(input_shape, num_classes, loss = "binary_crossentropy", optimizer = optimizer_adam(lr=0.001), metrics){
+build_ResNet <- function(input_shape, num_classes, loss = "binary_crossentropy", optimizer = keras::optimizer_adam(lr=0.001), metrics){
   if(num_classes < 3){
     num_units = 1
     activation = "sigmoid"
@@ -17,12 +17,12 @@ build_ResNet <- function(input_shape, num_classes, loss = "binary_crossentropy",
     activation = "softmax"
     }
 
-  model <- keras_model_sequential() %>%
-    layer_conv_3d(filters = 64, kernel_size = c(7,7,7), strides = c(2,2,2), padding = 'same',
+  model <- keras::keras_model_sequential() %>%
+    keras::layer_conv_3d(filters = 64, kernel_size = c(7,7,7), strides = c(2,2,2), padding = 'same',
                   use_bias = F, input_shape = input_shape) %>%
-    layer_batch_normalization() %>%
-    layer_activation_relu() %>%
-    layer_max_pooling_3d(pool_size = c(3,3,3), strides = c(2,2,2), padding = 'same')
+    keras::layer_batch_normalization() %>%
+    keras::layer_activation_relu() %>%
+    keras::layer_max_pooling_3d(pool_size = c(3,3,3), strides = c(2,2,2), padding = 'same')
 
   prev_filters <<- 64
   filter_list <<- c(rep(64,3), rep(128, 4), rep(256,6), rep(512,3))
@@ -34,12 +34,12 @@ build_ResNet <- function(input_shape, num_classes, loss = "binary_crossentropy",
   }
 
   model <- model %>%
-    layer_global_average_pooling_3d() %>%
-    layer_flatten() %>%
-    layer_dropout(0.3) %>%
-    layer_dense(units = num_units, activation = activation)
+    keras::layer_global_average_pooling_3d() %>%
+    keras::layer_flatten() %>%
+    keras::layer_dropout(0.3) %>%
+    keras::layer_dense(units = num_units, activation = activation)
 
-  model <- model %>% compile(loss="binary_crossentropy",
+  model <- model %>% keras::compile(loss="binary_crossentropy",
                     optimizer = optimizer,
                     metrics = metrics)
 
