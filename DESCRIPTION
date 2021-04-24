@@ -9,6 +9,13 @@ Authors@R:
            comment = c(ORCID = "https://orcid.org/0000-0002-1161-402X"))
 Description: This package builds and runs 3+ dimensional ML models for neuroimaging data.
     It also contains functions to interpret (3d Grad CAM), preprocess, and manipulate data.
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = "tf-keras-vis", pip = TRUE),
+      list(package = "adversarial-robustness-toolbox", pip = TRUE)
+    )
+  )
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -23,4 +30,5 @@ Imports:
     tfdatasets,
     tfaddons,
     caret,
-    magrittr
+    magrittr,
+    neurobase
