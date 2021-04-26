@@ -1,3 +1,14 @@
+#' Pipe
+#'
+#' Imports pipe operator from magrittr
+#'
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @rdname pipe
+#' @export
+#' @param lhs,rhs specify lhs and rhs
+NULL
+
 #' Set model parameters.
 #'
 #' @param input_shape 4D (x,y,z,channel) vector for input dimensions.
