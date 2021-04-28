@@ -3,6 +3,9 @@
 \name{\%>\%}
 \alias{\%>\%}
 \title{Pipe}
+\arguments{
+\item{lhs, rhs}{specify lhs and rhs}
+}
 \description{
 Imports pipe operator from magrittr
 }

@@ -17,7 +17,7 @@ build_afni_cmd <- function(afni_command, afni_opts = NULL){
   return(afni_cmd)
 }
 
-#' Title
+#' Runs afni command.
 #'
 #' @param afni_cmd
 #'
@@ -27,6 +27,112 @@ build_afni_cmd <- function(afni_command, afni_opts = NULL){
 #' @examples
 run_afni_command <- function(afni_cmd){
 
-  system(afni_cmd)
+  system(afni_cmd, intern=TRUE)
+
+}
+
+#' Title
+#'
+#' @param image_path
+#'
+#' @return
+#' @export
+#'
+#' @examples
+adjust_image_path_windows <- function(image_path){
+  linux_image_path <- paste0('/mnt/c', image_path)
+  return(linux_image_path)
+}
+
+#' Resamples image to a particular grid resolution.
+#'
+#' @param in_file Absolute path to file to be reasampled
+#' @param out_file Absolute path to save file destination.
+#' @param new_dims Vector of new dimensions c(x,y,z)
+#' @param extra_opts Extra options to feed to 3dresample (see docs for details).
+#'
+#' @return resampled image (also saves as nii).
+#' @export
+#'
+#' @examples
+resample_image <- function(in_file, out_file, new_dims, extra_opts = NULL){
+  cmd <- build_afni_cmd("3dresample", afni_opts = paste("-prefix",
+                                                        out_file,
+                                                        "-dxyz",
+                                                        new_dims[1],
+                                                        new_dims[2],
+                                                        new_dims[3],
+                                                        "-input",
+                                                        in_file)
+                        )
+  if(!is.null(extra_opts)){
+    cmd <- paste(cmd, extra_opts)
+  }
+  run_afni_command(cmd)
+  resampled_image <- neurobase::readnii(out_file)
+  return(resampled_image)
+}
+
+#' Title
+#'
+#' @param in_file
+#' @param out_file
+#' @param reference_file
+#' @param extra_opts
+#'
+#' @return
+#' @export
+#'
+#' @examples
+alline_image <- function(in_file, out_file, reference_file, extra_opts = NULL){
+
+}
+
+#' Title
+#'
+#' @param image_path
+#'
+#' @return
+#' @export
+#'
+#' @examples
+rgb_to_grayscale <- function(image_path){
+  linux_path <- adjust_image_path_windows(image_path)
+  afni_cmd <- build_afni_cmd('3dcalc', afni_opts = paste('-prefix',
+                                                         linux_path,
+                                                         '-a',
+                                                         linux_path,
+                                                         '-expr',
+                                                         'a/255',
+                                                         '-overwrite'))
+  run_afni_command(afni_cmd)
+  return("Image converted")
+}
+
+#' Title
+#'
+#' @param image_path
+#'
+#' @return
+#' @export
+#'
+#' @examples
+check_image_max <- function(image_path){
+
+  linux_path <- adjust_image_path_windows(image_path)
+  afni_cmd <- build_afni_cmd('3dinfo', afni_opts = paste('-max',
+                                                         linux_path))
+  cmd_output <- run_afni_command(afni_cmd) %>%
+    as.list()
+  idx <- which(lapply(cmd_output, function(x){grepl("^[[:digit:]]+", x)}) == TRUE)
+
+
+  max_value <-  cmd_output[[idx]] %>%
+    strsplit(., split='\\|') %>%
+    unlist() %>%
+    .[1] %>%
+    as.numeric()
+
+  return(max_value)
 
 }
