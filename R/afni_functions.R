@@ -56,21 +56,25 @@ adjust_image_path_windows <- function(image_path){
 #'
 #' @examples
 resample_image <- function(in_file, out_file, new_dims, extra_opts = NULL){
+  linux_in_file <- adjust_image_path_windows(in_file)
+  linux_out_file <- adjust_image_path_windows(out_file)
   cmd <- build_afni_cmd("3dresample", afni_opts = paste("-prefix",
-                                                        out_file,
+                                                        linux_out_file,
                                                         "-dxyz",
                                                         new_dims[1],
                                                         new_dims[2],
                                                         new_dims[3],
                                                         "-input",
-                                                        in_file)
+                                                        linux_in_file,
+                                                        "-overwrite")
                         )
+
   if(!is.null(extra_opts)){
     cmd <- paste(cmd, extra_opts)
   }
   run_afni_command(cmd)
   resampled_image <- neurobase::readnii(out_file)
-  return(resampled_image)
+  return(resampled_image@.Data)
 }
 
 #' Title
@@ -85,6 +89,25 @@ resample_image <- function(in_file, out_file, new_dims, extra_opts = NULL){
 #'
 #' @examples
 alline_image <- function(in_file, out_file, reference_file, extra_opts = NULL){
+
+  linux_in_file <- adjust_image_path_windows(in_file)
+  linux_out_file <- adjust_image_path_windows(out_file)
+  linux_reference_file <- adjust_image_path_windows(reference_file)
+  cmd <- build_afni_cmd("3dAllineate", afni_opts = paste("-prefix",
+                                                         linux_out_file,
+                                                         "-source",
+                                                         linux_in_file,
+                                                         "-base",
+                                                         linux_reference_file,
+                                                         "-overwrite"))
+
+  if(!is.null(extra_opts)){
+    cmd <- paste(cmd, extra_opts)
+  }
+
+  run_afni_command(cmd)
+  allined_image <- neurobase::readnii(out_file)
+  return(allined_image@.Data)
 
 }
 
@@ -135,4 +158,29 @@ check_image_max <- function(image_path){
 
   return(max_value)
 
+}
+
+#' Title
+#'
+#' @param in_file
+#' @param out_file
+#'
+#' @return
+#' @export
+#'
+#' @examples
+extract_highest_diffusion_shell <- function(in_file, out_file){
+  nii <- neurobase::readnii(in_file)
+  nii_data <- nii@.Data
+  if(length(dim(nii_data)) == 4){
+    nii_means <- apply(nii_data, 4, mean)
+    idx <- which.min(nii_means)
+    nii_final <- nii_data[,,,idx]
+  } else {
+    nii_final <- nii_data
+  }
+  new_nii <- oro.nifti::nifti(nii_final)
+  new_nii <- neurobase::copyNIfTIHeader(nii, new_nii)
+  oro.nifti::writeNIfTI(new_nii, filename = out_file)
+  return(new_nii)
 }
