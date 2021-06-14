@@ -15,9 +15,13 @@
 # train_dataset <- lapply(pre_train_dataset, function(x){x[-as.numeric(sorted_val_set_df$rn)]})
 #
 
+load('/Users/willi3by/Desktop/ISC_Class_Net_Files_for_Abdulla/isc_train_dataset.R')
+load('/Users/willi3by/Desktop/ISC_Class_Net_Files_for_Abdulla/isc_val_dataset.R')
+
 model_params <- set_model_params(input_shape = c(103,122,32,1), num_classes = 2,
                                 loss = "binary_crossentropy", activation = "sigmoid",
                                 optimizer = keras::optimizer_adam(), metrics = c("accuracy"))
+
 model <- build_ResNet50(model_params)
 
 results <- model %>%
