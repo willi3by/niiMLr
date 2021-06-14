@@ -10,7 +10,7 @@ run_afni_command(afni_cmd)
 \item{afni_cmd}{}
 }
 \value{
-
+NA
 }
 \description{
 Runs afni command.

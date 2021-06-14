@@ -2,7 +2,7 @@
 % Please edit documentation in R/afni_functions.R
 \name{adjust_image_path_windows}
 \alias{adjust_image_path_windows}
-\title{Title}
+\title{Add /mnt/c/ to path to make it compatible with WSL.}
 \usage{
 adjust_image_path_windows(image_path)
 }
@@ -10,8 +10,8 @@ adjust_image_path_windows(image_path)
 \item{image_path}{}
 }
 \value{
-
+Adjusted path.
 }
 \description{
-Title
+Add /mnt/c/ to path to make it compatible with WSL.
 }

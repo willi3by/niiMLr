@@ -2,7 +2,7 @@
 % Please edit documentation in R/afni_functions.R
 \name{rgb_to_grayscale}
 \alias{rgb_to_grayscale}
-\title{Title}
+\title{Convert RGB image to grayscale.}
 \usage{
 rgb_to_grayscale(image_path)
 }
@@ -10,8 +10,8 @@ rgb_to_grayscale(image_path)
 \item{image_path}{}
 }
 \value{
-
+NA
 }
 \description{
-Title
+Convert RGB image to grayscale.
 }

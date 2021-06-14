@@ -2,7 +2,7 @@
 % Please edit documentation in R/afni_functions.R
 \name{check_image_max}
 \alias{check_image_max}
-\title{Title}
+\title{Get max value of nii.}
 \usage{
 check_image_max(image_path)
 }
@@ -10,8 +10,8 @@ check_image_max(image_path)
 \item{image_path}{}
 }
 \value{
-
+image max.
 }
 \description{
-Title
+Get max value of nii.
 }

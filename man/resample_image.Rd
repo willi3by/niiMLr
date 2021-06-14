@@ -2,7 +2,7 @@
 % Please edit documentation in R/afni_functions.R
 \name{resample_image}
 \alias{resample_image}
-\title{Resamples image to a particular grid resolution.}
+\title{Resample image to a particular grid resolution.}
 \usage{
 resample_image(in_file, out_file, new_dims, extra_opts = NULL)
 }
@@ -16,8 +16,8 @@ resample_image(in_file, out_file, new_dims, extra_opts = NULL)
 \item{extra_opts}{Extra options to feed to 3dresample (see docs for details).}
 }
 \value{
-resampled image (also saves as nii).
+Resampled image (also saves as nii).
 }
 \description{
-Resamples image to a particular grid resolution.
+Resample image to a particular grid resolution.
 }

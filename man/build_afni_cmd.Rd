@@ -10,7 +10,7 @@ build_afni_cmd(afni_command, afni_opts = NULL)
 \item{afni_opts}{}
 }
 \value{
-
+AFNI command to run with system.
 }
 \description{
 Builds command to run in AFNI.

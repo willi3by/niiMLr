@@ -3,7 +3,7 @@
 #' @param afni_command
 #' @param afni_opts
 #'
-#' @return
+#' @return AFNI command to run with system.
 #' @export
 #'
 #' @examples
@@ -21,7 +21,7 @@ build_afni_cmd <- function(afni_command, afni_opts = NULL){
 #'
 #' @param afni_cmd
 #'
-#' @return
+#' @return NA
 #' @export
 #'
 #' @examples
@@ -31,11 +31,11 @@ run_afni_command <- function(afni_cmd){
 
 }
 
-#' Title
+#' Add /mnt/c/ to path to make it compatible with WSL.
 #'
 #' @param image_path
 #'
-#' @return
+#' @return Adjusted path.
 #' @export
 #'
 #' @examples
@@ -44,14 +44,14 @@ adjust_image_path_windows <- function(image_path){
   return(linux_image_path)
 }
 
-#' Resamples image to a particular grid resolution.
+#' Resample image to a particular grid resolution.
 #'
 #' @param in_file Absolute path to file to be reasampled
 #' @param out_file Absolute path to save file destination.
 #' @param new_dims Vector of new dimensions c(x,y,z)
 #' @param extra_opts Extra options to feed to 3dresample (see docs for details).
 #'
-#' @return resampled image (also saves as nii).
+#' @return Resampled image (also saves as nii).
 #' @export
 #'
 #' @examples
@@ -77,45 +77,91 @@ resample_image <- function(in_file, out_file, new_dims, extra_opts = NULL){
   return(resampled_image@.Data)
 }
 
-#' Title
+#' Aligns image to reference image.
 #'
 #' @param in_file
 #' @param out_file
+#' @param base_path
+#' @param emask
+#' @param extra_alline_opts
+#' @param overwrite
 #' @param reference_file
-#' @param extra_opts
 #'
 #' @return
 #' @export
 #'
 #' @examples
-alline_image <- function(in_file, out_file, reference_file, extra_opts = NULL){
+alline_image <- function(base_path ,in_file, out_file, reference_file, emask = NULL, extra_alline_opts = NULL, overwrite = TRUE){
 
   linux_in_file <- adjust_image_path_windows(in_file)
   linux_out_file <- adjust_image_path_windows(out_file)
   linux_reference_file <- adjust_image_path_windows(reference_file)
+
+  cmd <- build_afni_cmd("3drefit", afni_opts = paste("-deoblique", linux_in_file))
+  run_afni_command(cmd)
+
+  cmd <- build_afni_cmd("3dCM", afni_opts = paste("-set",
+                                                  "0 0 0",
+                                                  linux_in_file))
+  run_afni_command(cmd)
+
+  if(!is.null(emask)){
+    linux_emask <- adjust_image_path_windows(emask)
+    cmd <- build_afni_cmd("3drefit", afni_opts = paste("-deoblique", linux_emask))
+    run_afni_command(cmd)
+
+    cmd <- build_afni_cmd("3dCM", afni_opts = paste("-set", "0 0 0", linux_emask))
+    run_afni_command(cmd)
+  }
+
+  afni_opts <- paste("-prefix",
+                     paste0('/mnt/c/',base_path, "/ref2subj.nii"),
+                     "-base",
+                     linux_in_file,
+                     "-source",
+                     linux_reference_file,
+                     "-1Dmatrix_save",
+                     paste0('/mnt/c/',base_path, "/ref2subj.aff.1D"))
+
+  if(!is.null(emask)){
+    afni_opts <- paste(afni_opts, "-emask", linux_emask)
+  }
+  if(!is.null(extra_alline_opts)){
+    afni_opts <- paste(afni_opts, extra_alline_opts)
+  }
+  if(overwrite == TRUE){
+    afni_opts <- paste(afni_opts, "-overwrite")
+  }
+
+  cmd <- build_afni_cmd("3dAllineate", afni_opts = afni_opts)
+  run_afni_command(cmd)
+
+  cmd <- build_afni_cmd('cat_matvec', afni_opts = paste(paste0('/mnt/c/', base_path, "/ref2subj.aff.1D"),
+                                                        "-I >",
+                                                        paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"))
+  )
+  run_afni_command(cmd)
+
   cmd <- build_afni_cmd("3dAllineate", afni_opts = paste("-prefix",
                                                          linux_out_file,
                                                          "-source",
                                                          linux_in_file,
-                                                         "-base",
+                                                         "-1Dmatrix_apply",
+                                                         paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"),
+                                                         "-master",
                                                          linux_reference_file,
                                                          "-overwrite"))
-
-  if(!is.null(extra_opts)){
-    cmd <- paste(cmd, extra_opts)
-  }
-
   run_afni_command(cmd)
   allined_image <- neurobase::readnii(out_file)
   return(allined_image@.Data)
 
 }
 
-#' Title
+#' Convert RGB image to grayscale.
 #'
 #' @param image_path
 #'
-#' @return
+#' @return NA
 #' @export
 #'
 #' @examples
@@ -132,11 +178,11 @@ rgb_to_grayscale <- function(image_path){
   return("Image converted")
 }
 
-#' Title
+#' Get max value of nii.
 #'
 #' @param image_path
 #'
-#' @return
+#' @return image max.
 #' @export
 #'
 #' @examples
@@ -160,12 +206,12 @@ check_image_max <- function(image_path){
 
 }
 
-#' Title
+#' Extract highest shell of diffusion dataset.
 #'
 #' @param in_file
 #' @param out_file
 #'
-#' @return
+#' @return Nii object of highest shell image.
 #' @export
 #'
 #' @examples

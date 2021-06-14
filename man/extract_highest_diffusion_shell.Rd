@@ -2,7 +2,7 @@
 % Please edit documentation in R/afni_functions.R
 \name{extract_highest_diffusion_shell}
 \alias{extract_highest_diffusion_shell}
-\title{Title}
+\title{Extract highest shell of diffusion dataset.}
 \usage{
 extract_highest_diffusion_shell(in_file, out_file)
 }
@@ -10,8 +10,8 @@ extract_highest_diffusion_shell(in_file, out_file)
 \item{out_file}{}
 }
 \value{
-
+Nii object of highest shell image.
 }
 \description{
-Title
+Extract highest shell of diffusion dataset.
 }

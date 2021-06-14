@@ -2,16 +2,24 @@
 % Please edit documentation in R/afni_functions.R
 \name{alline_image}
 \alias{alline_image}
-\title{Title}
+\title{Aligns image to reference image.}
 \usage{
-alline_image(in_file, out_file, reference_file, extra_opts = NULL)
+alline_image(
+  base_path,
+  in_file,
+  out_file,
+  reference_file,
+  emask = NULL,
+  extra_alline_opts = NULL,
+  overwrite = TRUE
+)
 }
 \arguments{
-\item{extra_opts}{}
+\item{reference_file}{}
 }
 \value{
 
 }
 \description{
-Title
+Aligns image to reference image.
 }

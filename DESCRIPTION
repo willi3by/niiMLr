@@ -31,4 +31,5 @@ Imports:
     tfaddons,
     caret,
     magrittr,
-    neurobase
+    neurobase,
+    splitstackshape
