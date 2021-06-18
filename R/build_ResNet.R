@@ -41,6 +41,7 @@ build_ResNet <- function(numResNet, model_params){
                     optimizer = model_params$optimizer,
                     metrics = model_params$metrics)
 
+
   return(model)
 }
 

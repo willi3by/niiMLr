@@ -1,4 +1,8 @@
-residual_layer_decode <- keras::Layer(
+#' @export
+
+residual_layer_decode <- function(...) custom_residual_layer_decode ()(...)
+
+custom_residual_layer_decode <- function() keras::Layer(
   classname = "ResidualUnitDecode",
   initialize = function(filters=1, strides=1){
     super()$`__init__`()

@@ -1,4 +1,14 @@
-residual_layer <- keras::Layer(
+#' @export
+#
+residual_layer <- function(filters, strides, ...) {
+  filters <<- filters
+  strides <<- strides
+  custom_residual_layer()(..., filters, strides)
+}
+
+
+
+custom_residual_layer <- function() keras::Layer(
   classname = "ResidualUnit",
   initialize = function(filters=1, strides=1){
     super()$`__init__`()
@@ -40,3 +50,4 @@ residual_layer <- keras::Layer(
     return(keras::activation_relu(Z + skip_Z))
   }
 )
+

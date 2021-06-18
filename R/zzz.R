@@ -1,3 +1,6 @@
+tf_vis <- NULL
+art <- NULL
+
 .onLoad <- function(libname, pkgname){
   reticulate::configure_environment(pkgname)
   tf_vis <<- reticulate::import("tf_keras_vis", delay_load = TRUE)
