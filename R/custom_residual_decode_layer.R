@@ -4,8 +4,8 @@ residual_layer_decode <- function(...) custom_residual_layer_decode ()(...)
 
 custom_residual_layer_decode <- function() keras::Layer(
   classname = "ResidualUnitDecode",
-  initialize = function(filters=1, strides=1){
-    super()$`__init__`()
+  initialize = function(filters=1, strides=1, name=NULL){
+    super()$`__init__`(name = name)
     self$main_layers = list()
     self$skip_layers = list()
     self$filters = filters
