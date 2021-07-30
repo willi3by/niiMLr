@@ -1,0 +1,2 @@
+# For files that git detects are text files, always use LF line endings.
+*          text=auto
