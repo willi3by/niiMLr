@@ -4,7 +4,6 @@
 # niiMLr
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of niiMLr is to wrap functions from other neuroimaging and deep
@@ -29,6 +28,34 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("willi3by/niiMLr")
 ```
+
+### Python
+
+niiMLr requires Python in order to run TensorFlow. Before using niiMLr,
+you may need to [tell reticulate which version of Python to
+use](https://rstudio.github.io/reticulate/articles/versions.html).
+
+<details>
+<summary>
+Installation on M1 Macs (click to view)
+</summary>
+
+Getting TensorFlow to work on an M1 Mac currently requires some extra
+work. (The default Ananconda installation, for example, use the wrong
+installation of TensorFlow.) Follow the instructions at
+<https://developer.apple.com/metal/tensorflow-plugin/> to install the
+correct one using miniforge, a community-driven distribution that
+supports ARM.
+
+Then, use this code to tell reticulate which Python installation to use:
+
+``` r
+Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/miniforge3/bin/python"))
+```
+
+</details>
+
+### 
 
 ## Example
 
@@ -61,4 +88,4 @@ You can also embed plots, for example:
 <img src="man/figures/README-pressure-1.png" width="100%" />
 
 In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+files, so they display on GitHub!
