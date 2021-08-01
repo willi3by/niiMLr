@@ -45,19 +45,18 @@ installation of TensorFlow.) Follow the instructions at
 correct one using miniforge, a community-driven distribution that
 supports ARM.
   
-There may be some python packages that will fail to install with these instructions (specifically for tensorflow-macos) that need further attention. These packages are numpy, grpcio, and h5py. For numpy and grpcio, simply use `python -m pip install <packagename>`. For h5py, the following commands must be used (after installation of homebrew):
+Alternatively, copy and paste the following into the terminal:
 ``` python
-brew install hdf5
-export HDF5_DIR=/opt/homebrew/Cellar/hdf5/1.12.0_4
-```
-Following these installations, you may have to run the following to install tensorflow-macos successfully:
-``` python
-python -m pip install --no-dependencies tensorflow-macos
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/apple/tensorflow_macos/master/scripts/download_and_install.sh)"
 ```
 Then, use this code to tell reticulate which Python installation to use:
 
 ``` r
 Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/miniforge3/bin/python"))
 ```
+Or:
 
+``` r
+Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/tensorflow_macos_venv/bin/python"))
+```
 </details>
