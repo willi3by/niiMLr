@@ -15,14 +15,8 @@ Linux (WSL). AFNI installation instructions can be found at:
 
 ## Installation
 
-You can install the released version of niiMLr from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("niiMLr")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+niiMLr is not yet published to CRAN, but you can install the development
+version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
