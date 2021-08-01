@@ -39,11 +39,30 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("willi3by/niiMLr")
 ```
+
+### Python
+
+niiMLr requires Python in order to run TensorFlow. Before using niiMLr, you may need to [tell reticulate which version of Python to use](https://rstudio.github.io/reticulate/articles/versions.html).
+
+<details>
+<summary>Installation on M1 Macs (click to view)</summary>
+
+Getting TensorFlow to work on an M1 Mac currently requires some extra work. (The default Ananconda installation, for example, use the wrong installation of TensorFlow.) Follow the instructions at <https://developer.apple.com/metal/tensorflow-plugin/> to install the correct one using miniforge, a community-driven distribution that supports ARM.
+
+Then, use this code to tell reticulate which Python installation to use:
+```r
+Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/miniforge3/bin/python"))
+```
+
+</details>
+
+### 
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+```{r example, eval=FALSE}
 library(niiMLr)
 ## basic example code
 ```
