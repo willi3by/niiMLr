@@ -44,19 +44,38 @@ installation of TensorFlow.) Follow the instructions at
 <https://developer.apple.com/metal/tensorflow-plugin/> to install the
 correct one using miniforge, a community-driven distribution that
 supports ARM.
-  
-Alternatively, copy and paste the following into the terminal:
-``` python
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/apple/tensorflow_macos/master/scripts/download_and_install.sh)"
-```
+
 Then, use this code to tell reticulate which Python installation to use:
 
 ``` r
 Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/miniforge3/bin/python"))
 ```
-Or:
+
+Alternatively, you can use homebrew to install miniforge, use the
+installation script from the tensorflow_macos github page, and install
+dependencies:
+
+    brew install miniforge
+    conda create --name tensorflow_macos python=3.8 numpy
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/apple/tensorflow_macos/master/scripts/download_and_install.sh)"
+
+During the script installation, you will have to specify the path to the
+newly created conda env, which should be something like:
+`/opt/homebrew/Caskroom/miniforge/base/envs/tensorflow_macos`
+
+After installation of tensorflow, activate the environment
+`conda activate tensorflow_macos` and run the following to install
+dependencies that must be installed with conda instead of pip:
+
+    conda install numba
+    conda install scikit-learn
+    conda install scipy
+
+Finally, in R, set the RETICULATE_PYTHON variable to the python in the
+conda env:
 
 ``` r
-Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/tensorflow_macos_venv/bin/python"))
+Sys.setenv(RETICULATE_PYTHON = "/opt/homebrew/Caskroom/miniforge/base/envs/tensorflow_macos/bin/python")
 ```
+
 </details>
