@@ -49,7 +49,7 @@ adjust_image_path_windows <- function(image_path){
 #' @param in_file Absolute path to file to be reasampled
 #' @param out_file Absolute path to save file destination.
 #' @param new_dims Vector of new dimensions c(x,y,z)
-#' @param extra_opts Extra options to feed to 3dresample (see docs for details).
+#' @param extra_opts Extra options to feed to 3dresample (see afni docs for details).
 #'
 #' @return Resampled image (also saves as nii).
 #' @export
@@ -151,8 +151,28 @@ alline_image <- function(base_path ,in_file, out_file, reference_file, emask = N
                                                          "-master",
                                                          linux_reference_file,
                                                          "-overwrite"))
+
+
   run_afni_command(cmd)
   allined_image <- neurobase::readnii(out_file)
+
+  if(!is.null(emask)){
+    linux_emask <- adjust_image_path_windows(emask)
+    emask_out <- substr(emask, 1, nchar(emask)-4)
+    emask_out <- paste0(emask_out, "_allined.nii")
+    linux_emask_out <- adjust_image_path_windows(emask_out)
+    cmd <- build_afni_cmd("3dAllineate", afni_opts = paste("-prefix",
+                                                           linux_emask_out,
+                                                           "-source",
+                                                           linux_emask,
+                                                           "-1Dmatrix_apply",
+                                                           paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"),
+                                                           "-master",
+                                                           linux_reference_file,
+                                                           "-overwrite"))
+
+  }
+  run_afni_command(cmd)
   return(allined_image@.Data)
 
 }
