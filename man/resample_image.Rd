@@ -13,7 +13,7 @@ resample_image(in_file, out_file, new_dims, extra_opts = NULL)
 
 \item{new_dims}{Vector of new dimensions c(x,y,z)}
 
-\item{extra_opts}{Extra options to feed to 3dresample (see docs for details).}
+\item{extra_opts}{Extra options to feed to 3dresample (see afni docs for details).}
 }
 \value{
 Resampled image (also saves as nii).
