@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![Project Status: WIP – Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
 The goal of niiMLr is to wrap functions from other neuroimaging and deep
@@ -16,49 +19,63 @@ Linux (WSL). AFNI installation instructions can be found at:
 
 ## Installation
 
-You can install the released version of niiMLr from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("niiMLr")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+niiMLr is not yet published to CRAN, but you can install the development
+version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("willi3by/niiMLr")
 ```
 
-## Example
+### Python
 
-This is a basic example which shows you how to solve a common problem:
+niiMLr requires Python in order to run TensorFlow. Before using niiMLr,
+you may need to [tell reticulate which version of Python to
+use](https://rstudio.github.io/reticulate/articles/versions.html).
+
+<details>
+<summary>
+Installation on M1 Macs (click to view)
+</summary>
+
+Getting TensorFlow to work on an M1 Mac currently requires some extra
+work. (The default Ananconda installation, for example, use the wrong
+installation of TensorFlow.) Follow the instructions at
+<https://developer.apple.com/metal/tensorflow-plugin/> to install the
+correct one using miniforge, a community-driven distribution that
+supports ARM.
+
+Then, use this code to tell reticulate which Python installation to use:
 
 ``` r
-library(niiMLr)
-## basic example code
+Sys.setenv(RETICULATE_PYTHON = paste0(Sys.getenv("HOME"), "/miniforge3/bin/python"))
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+Alternatively, you can use homebrew to install miniforge, use the
+installation script from the tensorflow_macos github page, and install
+dependencies:
+
+    brew install miniforge
+    conda create --name tensorflow_macos python=3.8 numpy
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/apple/tensorflow_macos/master/scripts/download_and_install.sh)"
+
+During the script installation, you will have to specify the path to the
+newly created conda env, which should be something like:
+`/opt/homebrew/Caskroom/miniforge/base/envs/tensorflow_macos`
+
+After installation of tensorflow, activate the environment
+`conda activate tensorflow_macos` and run the following to install
+dependencies that must be installed with conda instead of pip:
+
+    conda install numba
+    conda install scikit-learn
+    conda install scipy
+
+Finally, in R, set the RETICULATE_PYTHON variable to the python in the
+conda env:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+Sys.setenv(RETICULATE_PYTHON = "/opt/homebrew/Caskroom/miniforge/base/envs/tensorflow_macos/bin/python")
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+</details>
