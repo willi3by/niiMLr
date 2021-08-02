@@ -5,6 +5,10 @@
 \title{Resample image to a particular grid resolution.}
 \usage{
 resample_image(in_file, out_file, new_dims, extra_opts = NULL)
+
+resample_image(in_file, out_file, new_dims, extra_opts = NULL)
+
+resample_image(in_file, out_file, new_dims, extra_opts = NULL)
 }
 \arguments{
 \item{in_file}{Absolute path to file to be reasampled}
@@ -13,11 +17,19 @@ resample_image(in_file, out_file, new_dims, extra_opts = NULL)
 
 \item{new_dims}{Vector of new dimensions c(x,y,z)}
 
-\item{extra_opts}{Extra options to feed to 3dresample (see afni docs for details).}
+\item{extra_opts}{Extra options to feed to 3dresample (see docs for details).}
 }
 \value{
 Resampled image (also saves as nii).
+
+Resampled image (also saves as nii).
+
+Resampled image (also saves as nii).
 }
 \description{
+Resample image to a particular grid resolution.
+
+Resample image to a particular grid resolution.
+
 Resample image to a particular grid resolution.
 }

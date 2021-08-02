@@ -5,13 +5,25 @@
 \title{Get max value of nii.}
 \usage{
 check_image_max(image_path)
+
+check_image_max(image_path)
+
+check_image_max(image_path)
 }
 \arguments{
 \item{image_path}{}
 }
 \value{
 image max.
+
+image max.
+
+image max.
 }
 \description{
+Get max value of nii.
+
+Get max value of nii.
+
 Get max value of nii.
 }

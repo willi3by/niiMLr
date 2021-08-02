@@ -5,13 +5,25 @@
 \title{Add /mnt/c/ to path to make it compatible with WSL.}
 \usage{
 adjust_image_path_windows(image_path)
+
+adjust_image_path_windows(image_path)
+
+adjust_image_path_windows(image_path)
 }
 \arguments{
 \item{image_path}{}
 }
 \value{
 Adjusted path.
+
+Adjusted path.
+
+Adjusted path.
 }
 \description{
+Add /mnt/c/ to path to make it compatible with WSL.
+
+Add /mnt/c/ to path to make it compatible with WSL.
+
 Add /mnt/c/ to path to make it compatible with WSL.
 }

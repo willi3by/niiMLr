@@ -5,13 +5,25 @@
 \title{Convert RGB image to grayscale.}
 \usage{
 rgb_to_grayscale(image_path)
+
+rgb_to_grayscale(image_path)
+
+rgb_to_grayscale(image_path)
 }
 \arguments{
 \item{image_path}{}
 }
 \value{
 NA
+
+NA
+
+NA
 }
 \description{
+Convert RGB image to grayscale.
+
+Convert RGB image to grayscale.
+
 Convert RGB image to grayscale.
 }

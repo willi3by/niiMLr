@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 #' Builds command to run in AFNI.
 #'
 #' @param afni_command
@@ -251,7 +250,6 @@ extract_highest_diffusion_shell <- function(in_file, out_file){
   oro.nifti::writeNIfTI(new_nii, filename = out_file)
   return(new_nii)
 }
-=======
 #' Builds command to run in AFNI.
 #'
 #' @param afni_command
@@ -736,4 +734,3 @@ extract_highest_diffusion_shell <- function(in_file, out_file){
   oro.nifti::writeNIfTI(new_nii, filename = out_file)
   return(new_nii)
 }
->>>>>>> Stashed changes

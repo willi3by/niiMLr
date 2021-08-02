@@ -5,13 +5,25 @@
 \title{Runs afni command.}
 \usage{
 run_afni_command(afni_cmd)
+
+run_afni_command(afni_cmd)
+
+run_afni_command(afni_cmd)
 }
 \arguments{
 \item{afni_cmd}{}
 }
 \value{
 NA
+
+NA
+
+NA
 }
 \description{
+Runs afni command.
+
+Runs afni command.
+
 Runs afni command.
 }

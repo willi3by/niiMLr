@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 #' Build Residual U-Net
 #'
 #' @param model_params Model params list, must add batch size when making list.
@@ -86,7 +85,7 @@ build_UResNet <- function(model_params){
   return(model)
 
 }
-=======
+
 #' Build Residual U-Net
 #'
 #' @param model_params Model params list, must add batch size when making list.
@@ -261,4 +260,3 @@ build_UResNet <- function(model_params){
   return(model)
 
 }
->>>>>>> Stashed changes
