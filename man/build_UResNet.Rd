@@ -8,7 +8,7 @@ build_UResNet(model_params)
 }
 \arguments{
 \item{model_params}{Model params list, must add batch size when making list.
-Also, x,y,z dims of input_shape must be even and dividends must be even too.}
+Also, x,y,z dims of input_shape must be even.}
 }
 \value{
 
