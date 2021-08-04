@@ -55,7 +55,7 @@ adjust_image_path_windows <- function(image_path){
 #' @export
 #'
 #' @examples
-resample_image <- function(in_file, out_file, new_dims, extra_opts = NULL){
+resample_image_afni <- function(in_file, out_file, new_dims, extra_opts = NULL){
   linux_in_file <- adjust_image_path_windows(in_file)
   linux_out_file <- adjust_image_path_windows(out_file)
   cmd <- build_afni_cmd("3dresample", afni_opts = paste("-prefix",

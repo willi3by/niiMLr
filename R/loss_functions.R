@@ -15,10 +15,22 @@ dice_loss <- function(y_true, y_pred){
   return(keras::k_reshape(1-numerator / denominator, c(-1,1,1)))
 }
 
-jaccard_loss <- function(y_true, y_pred, smooth=100){
+#' Jaccard loss, better for unbalanced datasets.
+#'
+#' @param y_true
+#' @param y_pred
+#' @param smooth
+#'
+#' @return
+#' @export
+#'
+#' @examples
+jaccard_loss <<- function(y_true, y_pred){
 
-  intersection <- keras::k_sum(keras::k_abs(y_true * y_pred), axis=-1)
-  sum_ = keras::k_sum(keras::k_abs(y_true) + keras::k_abs(y_pred), axis=-1)
-  jac = (intersection + smooth) / (sum_ - intersection + smooth)
-  return((1-jac)*smooth)
+  K <- keras::backend()
+  intersection <- K$sum(K$abs(y_true * y_pred), axis=-1)
+  sum_ <- K$sum(K$abs(y_true) + K$abs(y_pred), axis=-1)
+  jac <- (intersection) / (sum_ - intersection)
+  jac_loss <- 1-jac
+  return(jac_loss)
 }

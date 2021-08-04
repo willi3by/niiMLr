@@ -9,6 +9,11 @@
 build_DeepMedic <- function(model_params){
   input_path_1 <- keras::layer_input(shape=model_params$input_shape, name="input_path_1")
   input_shape_2 <- c((model_params$input_shape[1:3]/2+8), model_params$input_shape[4])
+  # for(d in 1:length(input_shape_2[1:3])){
+  #   if(input_shape_2[d] %% 2 != 0){
+  #     input_shape_2[d] <- input_shape_2[d] - 1
+  #   }
+  # }
   input_path_2 <- keras::layer_input(shape=input_shape_2, name="input_path_2")
 
   path_1 <- input_path_1 %>%
@@ -132,7 +137,9 @@ concat_layer <- keras::layer_add(list(path_1, path_2))
 
 main_output <- concat_layer %>%
   keras::layer_dense(units = 150, activation="relu") %>%
+  keras::layer_alpha_dropout(rate=0.5) %>%
   keras::layer_dense(units = 150, activation="relu") %>%
+  keras::layer_alpha_dropout(rate=0.5) %>%
   keras::layer_dense(units = model_params$num_classes,
                      activation = model_params$activation) %>%
   keras::layer_zero_padding_3d(padding = c(8,8,8), name = "main_output")
@@ -141,4 +148,5 @@ model <- keras::keras_model(inputs = c(input_path_1, input_path_2), outputs = ma
 model %>% keras::compile(optimizer = model_params$optimizer,
                   loss = model_params$loss,
                   metrics = model_params$metrics)
+return(model)
 }

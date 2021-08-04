@@ -82,6 +82,8 @@ build_UResNet <- function(model_params){
   model <- keras::keras_model(inputs, conv10) %>%
     keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
 
+
+
   return(model)
 
 }

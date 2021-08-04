@@ -44,7 +44,7 @@ train_model_standard <- function(model, x_train, y_train, model_weights=NULL, ep
 #' @export
 #'
 #' @examples
-train_model_kfold <- function(model_building_fn, model_params, n_epochs, batch_size, x_train, y_train, n_folds){
+train_model_kfold <- function(model_building_fn, model_params, n_epochs, batch_size, dataset, n_folds){
 
   folds <- caret::createFolds(y_train, k = n_folds)
   acc_per_fold <- list()
@@ -53,16 +53,17 @@ train_model_kfold <- function(model_building_fn, model_params, n_epochs, batch_s
 
     model <- model_building_fn
 
-    x_train_fold <- x_train[-folds[[i]]]
-    y_train_fold <- y_train[-folds[[i]]]
-    x_val_fold <- x_train[folds[[i]]]
-    y_val_fold <- y_train[folds[[i]]]
+    x_train_fold <- dataset$x[-folds[[k]]]
+    y_train_fold <- dataset$y[-folds[[k]]]
+    x_val_fold <- dataset$x[folds[[k]]]
+    y_val_fold <- dataset$y[folds[[k]]]
 
     model_history <- model %>%
-      fit(x_train_fold, y_train_fold, epochs = n_epochs, batch_size = batch_size, callbacks = list(
-        keras::callback_model_checkpoint(filepath = paste("./best_model_Fold_", k, ".h5")),
+      fit(x_train_fold, y_train_fold, epochs = n_epochs, batch_size = batch_size,
+          validation_data=list(x_val_fold, y_val_fold), callbacks = list(
+        keras::callback_model_checkpoint(filepath = paste("./best_model_Fold_", k, ".h5"), monitor="val_loss"),
         keras::callback_tensorboard(log_dir = paste0("./Fold_", i, "_logs/")),
-        keras::callback_reduce_lr_on_plateau()
+        keras::callback_reduce_lr_on_plateau(monitor="val_loss")
       ))
 
     model_scores <- model %>%
