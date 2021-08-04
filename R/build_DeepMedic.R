@@ -8,7 +8,7 @@
 #' @examples
 build_DeepMedic <- function(model_params){
   input_path_1 <- keras::layer_input(shape=model_params$input_shape, name="input_path_1")
-  input_shape_2 <- c((model_params$input_shape[1:3]/2+8), model_params$input_shape[4])
+  input_shape_2 <- c((model_params$input_shape[1:3]%/%2+8), model_params$input_shape[4])
   # for(d in 1:length(input_shape_2[1:3])){
   #   if(input_shape_2[d] %% 2 != 0){
   #     input_shape_2[d] <- input_shape_2[d] - 1
@@ -132,6 +132,21 @@ build_DeepMedic <- function(model_params){
     keras::layer_batch_normalization() %>%
     keras::layer_spatial_dropout_3d(rate=0.02) %>%
     keras::layer_upsampling_3d(size=c(2,2,2))
+
+
+  path_1_shape <- path_1$get_shape()$as_list() %>%
+    unlist()
+  path_2_shape <- path_2$get_shape()$as_list() %>%
+    unlist()
+  shape_diff <- path_1_shape - path_2_shape
+  if(sum(shape_diff) > 0){
+    path_2 <- path_2 %>%
+      keras::layer_zero_padding_3d(padding = list(
+        list(shape_diff[1],0),
+        list(shape_diff[2],0),
+        list(shape_diff[3],0)
+      ))
+  }
 
 concat_layer <- keras::layer_add(list(path_1, path_2))
 

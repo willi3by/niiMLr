@@ -2,6 +2,13 @@
 #   return(tensorflow::tf$keras$metrics$MeanIoU(num_classes=2))
 # })
 
+#' @export
+#'
+dice_fn <- function(y_true, y_pred, smooth){
+  dice()(...)
+}
+
+
 #' Dice coefficient metric
 #'
 #' @param y_true
@@ -9,7 +16,6 @@
 #' @param smooth
 #'
 #' @return
-#' @export
 #'
 #' @examples
 dice <- keras::custom_metric("dice", function(y_true, y_pred, smooth = 1.0) {
