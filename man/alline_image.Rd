@@ -13,41 +13,13 @@ alline_image(
   extra_alline_opts = NULL,
   overwrite = TRUE
 )
-
-alline_image(
-  base_path,
-  in_file,
-  out_file,
-  reference_file,
-  emask = NULL,
-  extra_alline_opts = NULL,
-  overwrite = TRUE
-)
-
-alline_image(
-  base_path,
-  in_file,
-  out_file,
-  reference_file,
-  emask = NULL,
-  extra_alline_opts = NULL,
-  overwrite = TRUE
-)
 }
 \arguments{
 \item{reference_file}{}
 }
 \value{
 
-
-
-
-
 }
 \description{
-Aligns image to reference image.
-
-Aligns image to reference image.
-
 Aligns image to reference image.
 }

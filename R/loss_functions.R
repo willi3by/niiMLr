@@ -25,7 +25,7 @@ dice_loss <- function(y_true, y_pred){
 #' @export
 #'
 #' @examples
-jaccard_loss <<- function(y_true, y_pred){
+jaccard_loss <- function(y_true, y_pred){
 
   K <- keras::backend()
   intersection <- K$sum(K$abs(y_true * y_pred), axis=-1)

@@ -5,25 +5,13 @@
 \title{Extract highest shell of diffusion dataset.}
 \usage{
 extract_highest_diffusion_shell(in_file, out_file)
-
-extract_highest_diffusion_shell(in_file, out_file)
-
-extract_highest_diffusion_shell(in_file, out_file)
 }
 \arguments{
 \item{out_file}{}
 }
 \value{
 Nii object of highest shell image.
-
-Nii object of highest shell image.
-
-Nii object of highest shell image.
 }
 \description{
-Extract highest shell of diffusion dataset.
-
-Extract highest shell of diffusion dataset.
-
 Extract highest shell of diffusion dataset.
 }

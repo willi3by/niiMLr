@@ -5,26 +5,14 @@
 \title{Build Residual U-Net}
 \usage{
 build_UResNet(model_params)
-
-build_UResNet(model_params)
-
-build_UResNet(model_params)
 }
 \arguments{
 \item{model_params}{Model params list, must add batch size when making list.
-Also, x,y,z dims of input_shape must be even.}
+Also, x,y,z dims of input_shape must be even and dividends must be even too.}
 }
 \value{
 
-
-
-
-
 }
 \description{
-Build Residual U-Net
-
-Build Residual U-Net
-
 Build Residual U-Net
 }

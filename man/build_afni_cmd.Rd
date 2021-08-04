@@ -5,25 +5,13 @@
 \title{Builds command to run in AFNI.}
 \usage{
 build_afni_cmd(afni_command, afni_opts = NULL)
-
-build_afni_cmd(afni_command, afni_opts = NULL)
-
-build_afni_cmd(afni_command, afni_opts = NULL)
 }
 \arguments{
 \item{afni_opts}{}
 }
 \value{
 AFNI command to run with system.
-
-AFNI command to run with system.
-
-AFNI command to run with system.
 }
 \description{
-Builds command to run in AFNI.
-
-Builds command to run in AFNI.
-
 Builds command to run in AFNI.
 }
