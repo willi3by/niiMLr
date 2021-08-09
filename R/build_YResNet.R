@@ -94,9 +94,17 @@ build_YResNet <- function(model_params){
 
     keras::layer_dense(model_params$num_classes, name = "y_dense2")
 
-  model <- keras::keras_model(inputs, conv10) %>%
-    keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
+  uncompiled_model <- keras::keras_model(
+    inputs,
+    outputs = c(conv10, y_bottom)
+  )
 
-  return(model)
+  compiled_model <- model %>%
+    keras::compile(
+      optimizer = model_params$optimizer,
+      loss = model_params$loss
+    )
+
+  return(compiled_model)
 
 }
