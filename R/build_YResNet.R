@@ -88,7 +88,8 @@ build_YResNet <- function(model_params){
     # number filters here?
     residual_layer(name = "y_conv13", filters=128, strides=2) %>%
 
-    keras::layer_average_pooling_3d(name = "y_average_pool") %>%
+    # pool_size, strides, padding?
+    keras::layer_average_pooling_3d(name = "y_average_pool", pool_size = c(3,3,3), strides = 1, padding = "same") %>%
 
     keras::layer_dense(64, name = "y_dense1") %>%
 
@@ -99,7 +100,7 @@ build_YResNet <- function(model_params){
     outputs = c(conv10, y_bottom)
   )
 
-  compiled_model <- model %>%
+  compiled_model <- uncompiled_model %>%
     keras::compile(
       optimizer = model_params$optimizer,
       loss = model_params$loss
