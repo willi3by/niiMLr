@@ -92,8 +92,7 @@ build_YResNet <- function(model_params){
 
     keras::layer_dense(64, name = "y_dense1") %>%
 
-    #TODO: num classes
-    keras::layer_dense(name = "y_dense2")
+    keras::layer_dense(model_params$num_classes, name = "y_dense2")
 
   model <- keras::keras_model(inputs, conv10) %>%
     keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
