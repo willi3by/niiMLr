@@ -93,7 +93,7 @@ build_YResNet <- function(model_params){
 
     keras::layer_dense(64, name = "y_dense1") %>%
 
-    keras::layer_dense(model_params$num_classes, name = "y_dense2")
+    keras::layer_dense(model_params$num_classes, activation = model_params$activation, name = "y_dense2")
 
   # Operands could not be broadcast together with shapes (512, 512, 512, 1) (4, 4, 8, 3)
   # mulitplied <- keras::layer_multiply(c(conv10, y_bottom))
