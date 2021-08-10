@@ -91,6 +91,8 @@ build_YResNet <- function(model_params){
     # pool_size, strides, padding?
     keras::layer_average_pooling_3d(name = "y_average_pool", pool_size = c(3,3,3), strides = 1, padding = "same") %>%
 
+    keras::layer_flatten() %>%
+
     keras::layer_dense(64, name = "y_dense1") %>%
 
     keras::layer_dense(model_params$num_classes, activation = model_params$activation, name = "y_dense2")
