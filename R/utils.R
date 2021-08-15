@@ -39,3 +39,21 @@ set_model_params <- function(input_shape,
   model_params <- append(model_params, additional_params)
   return(model_params)
 }
+
+#' Find highest common factor between 2 numbers, useful for chunking rectangular matrix.
+#'
+#' @param x
+#' @param y
+#'
+#' @return
+#' @export
+#'
+#' @examples
+hcf <- function(x, y) {
+  while(y) {
+    temp = y
+    y = x %% y
+    x = temp
+  }
+  return(x)
+}

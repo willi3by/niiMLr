@@ -4,7 +4,7 @@
 \alias{dice}
 \title{Dice coefficient metric}
 \usage{
-dice(...)
+dice()
 }
 \arguments{
 \item{smooth}{}

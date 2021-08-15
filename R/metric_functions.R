@@ -2,10 +2,11 @@
 #   return(tensorflow::tf$keras$metrics$MeanIoU(num_classes=2))
 # })
 
-#' @export
 #'
-dice_fn <- function(y_true, y_pred, smooth){
-  dice()(...)
+#'
+#' @export
+dice_fn <- function(y_true, y_pred, ...) {
+  dice()(..., y_true, y_pred)
 }
 
 
@@ -16,11 +17,11 @@ dice_fn <- function(y_true, y_pred, smooth){
 #' @param smooth
 #'
 #' @return
-#'
+#' @export
 #' @examples
-dice <- keras::custom_metric("dice", function(y_true, y_pred, smooth = 1.0) {
+dice <- function() keras::custom_metric("dice", function(y_true, y_pred) {
   y_true_f <- keras::k_flatten(y_true)
   y_pred_f <- keras::k_flatten(y_pred)
   intersection <- keras::k_sum(y_true_f * y_pred_f)
-  (2 * intersection + smooth) / (keras::k_sum(y_true_f) + keras::k_sum(y_pred_f) + smooth)
+  (2 * intersection) / (keras::k_sum(y_true_f) + keras::k_sum(y_pred_f))
 })

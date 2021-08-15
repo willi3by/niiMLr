@@ -81,3 +81,13 @@ add_dim <- function(data, last=TRUE){
   }
   return(data)
 }
+
+#' Function to chunk image for fitting into memory.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+chunk_image <- function(num_chunks, chunk_size){
+
+}
