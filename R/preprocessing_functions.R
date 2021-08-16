@@ -9,7 +9,7 @@
 #' @examples
 resample_image <- function(data, scale_factor){
   data_dims <- dim(data)[1:3]
-  new_data_dims <- data_dims %/% scale_factor + 8
+  new_data_dims <- data_dims %/% scale_factor
   # for(d in 1:length(new_data_dims)){
   #   if(new_data_dims[d] %% 2 != 0){
   #     new_data_dims[d] <- new_data_dims[d] + 1
