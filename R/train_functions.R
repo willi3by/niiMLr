@@ -1,3 +1,22 @@
+#' Standard training function.
+#'
+#' @param model
+#' @param x_train
+#' @param y_train
+#' @param model_weights
+#' @param epochs
+#' @param batch_size
+#' @param validation_data
+#' @param validation_split
+#' @param callbacks
+#' @param class_weight
+#' @param steps_per_epoch
+#' @param validation_steps
+#'
+#' @return
+#' @export
+#'
+#' @examples
 train_model_standard <- function(model, x_train, y_train, model_weights=NULL, epochs, batch_size, validation_data = NULL, validation_split = NULL,
                         callbacks = NULL, class_weight = NULL, steps_per_epoch = NULL, validation_steps = NULL){
   model$build(input_shape = x_train$shape)
@@ -11,28 +30,44 @@ train_model_standard <- function(model, x_train, y_train, model_weights=NULL, ep
   return(model_history)
 }
 
-train_model_kfold <- function(model_building_fn, n_epochs, batch_size, x_train, y_train, n_folds){
+#' Training with K-fold cross-validation.
+#'
+#' @param model_building_fn
+#' @param model_params
+#' @param n_epochs
+#' @param batch_size
+#' @param x_train
+#' @param y_train
+#' @param n_folds
+#'
+#' @return
+#' @export
+#'
+#' @examples
+train_model_kfold <- function(model_building_fn, model_params, n_epochs, batch_size, dataset, n_folds){
 
-  folds <- createFolds(y_train, k = n_folds)
+  folds <- caret::createFolds(y_train, k = n_folds)
   acc_per_fold <- list()
   loss_per_fold <- list()
   for(k in 1:length(folds)){
 
     model <- model_building_fn
 
-    x_train_fold <- x_train[-folds[[i]]]
-    y_train_fold <- y_train[-folds[[i]]]
-    x_val_fold <- x_train[folds[[i]]]
-    y_val_fold <- y_train[folds[[i]]]
+    x_train_fold <- dataset$x[-folds[[k]]]
+    y_train_fold <- dataset$y[-folds[[k]]]
+    x_val_fold <- dataset$x[folds[[k]]]
+    y_val_fold <- dataset$y[folds[[k]]]
 
     model_history <- model %>%
-      fit(x_train_fold, y_train_fold, epochs = n_epochs, batch_size = batch_size, callbacks = list(
-        callback_model_checkpoint(filepath = paste("./best_model_Fold_", k, ".h5")),
-        callback_tensorboard(log_dir = paste0("./Fold_", i, "_logs/"))
+      fit(x_train_fold, y_train_fold, epochs = n_epochs, batch_size = batch_size,
+          validation_data=list(x_val_fold, y_val_fold), callbacks = list(
+        keras::callback_model_checkpoint(filepath = paste("./best_model_Fold_", k, ".h5"), monitor="val_loss"),
+        keras::callback_tensorboard(log_dir = paste0("./Fold_", i, "_logs/")),
+        keras::callback_reduce_lr_on_plateau(monitor="val_loss")
       ))
 
     model_scores <- model %>%
-      evaluate(x_val_fold, y_val_fold)
+      keras::evaluate(x_val_fold, y_val_fold)
 
     print(paste0("Score for fold ", i, ": ", model$metrics_names[1], " of ", model_scores[1]))
     print(paste0("Score for fold ", i, ": ", model$metrics_names[2], " of ", model_scores[2]*100, "%"))

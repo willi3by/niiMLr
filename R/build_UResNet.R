@@ -1,7 +1,7 @@
 #' Build Residual U-Net
 #'
 #' @param model_params Model params list, must add batch size when making list.
-#' Also, x,y,z dims of input_shape must be even.
+#' Also, x,y,z dims of input_shape must be even and dividends must be even too.
 #'
 #' @return
 #' @export
@@ -81,6 +81,8 @@ build_UResNet <- function(model_params){
 
   model <- keras::keras_model(inputs, conv10) %>%
     keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
+
+
 
   return(model)
 
