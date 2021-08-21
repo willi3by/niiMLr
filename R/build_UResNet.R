@@ -11,7 +11,10 @@ build_UResNet <- function(model_params){
 
   inputs <- keras::layer_input(name = "inputs", batch_shape = c(model_params$batch_size, model_params$input_shape))
 
-  conv1 <- inputs %>%
+  padding <- get_padding(model_params$input_shape, multiple_of = c(32, 32, 16))
+  padded_inputs <- inputs %>% keras::layer_zero_padding_3d(padding)
+
+  conv1 <- padded_inputs %>%
     keras::layer_conv_3d(name = "conv1", filters = 64, kernel_size = c(7,7,7), strides = c(2,2,1), padding = "same", use_bias = F) %>%
     keras::layer_batch_normalization(name="conv1_batchnorm") %>%
     keras::layer_activation_relu(name = "conv1_relu")
@@ -79,8 +82,15 @@ build_UResNet <- function(model_params){
     keras::layer_upsampling_3d(name = "conv10_upsampling", size = c(2,2,1)) %>%
     keras::layer_conv_3d(name = "conv10", filters = 1,kernel_size = 1, strides = 1, activation = model_params$activation)
 
-  model <- keras::keras_model(inputs, conv10) %>%
-    keras::compile(optimizer = model_params$optimizer, loss = model_params$loss)
+  output <- conv10 %>% keras::layer_cropping_3d(padding)
+
+  model <- keras::keras_model(inputs, output) %>%
+    keras::compile(
+      optimizer = model_params$optimizer,
+      loss = model_params$loss#,
+      # https://keras.io/examples/keras_recipes/debugging_tips/#tip-3-to-debug-what-happens-during-fit-use-runeagerlytrue
+      # run_eagerly=T
+    )
 
 
 

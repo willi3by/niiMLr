@@ -11,7 +11,9 @@ build_YResNet <- function(model_params){
 
   inputs <- keras::layer_input(name = "inputs", batch_shape = c(model_params$batch_size, model_params$input_shape))
 
-  conv1 <- inputs %>%
+  padded_inputs <- inputs %>% pad(c(32, 32, 16))
+
+  conv1 <- padded_inputs %>%
     keras::layer_conv_3d(name = "conv1", filters = 64, kernel_size = c(7,7,7), strides = c(2,2,1), padding = "same", use_bias = F) %>%
     keras::layer_batch_normalization(name="conv1_batchnorm") %>%
     keras::layer_activation_relu(name = "conv1_relu")
@@ -105,9 +107,75 @@ build_YResNet <- function(model_params){
   compiled_model <- uncompiled_model %>%
     keras::compile(
       optimizer = model_params$optimizer,
-      loss = model_params$loss
+      loss = model_params$loss,
+      # https://keras.io/examples/keras_recipes/debugging_tips/#tip-3-to-debug-what-happens-during-fit-use-runeagerlytrue
+      run_eagerly=T
     )
 
   return(compiled_model)
 
 }
+
+# https://stackoverflow.com/questions/63286996/upsampling-upscaling-a-matrix-by-duplicating-rows-and-columns-in-r
+upscale_matrix = function(m, factor) {
+  return(
+    m[
+      rep(1:nrow(m), factor),
+      rep(1:ncol(m), factor)
+    ]
+  )
+}
+
+is_salient <- function(probs) {
+  probs > 0.3
+}
+
+listify <- function(l, dimension) {
+  # https://stackoverflow.com/questions/20198751/three-dimensional-array-to-list
+  lapply(seq(dim(l)[dimension]), abind::asub, x = l, dims = dimension)
+}
+
+YNet_postprocess <- function() {
+  # num_images <- 10
+  num_instances_per_image <- 8L
+  # num_instances_total <- num_images * num_instances_per_image
+  num_classes <- 5L
+
+  size <- 16L
+  axial_size <- 2L
+  instance_dim <- c(size, size, axial_size)
+
+  bottom_output <- array(0, c(num_instances_per_image, num_classes))
+  top_output <- array(0, c(num_instances_per_image, instance_dim, 1L))
+
+  ##########
+
+  cutoff <- 0.3
+
+  bottom_output_max_prob <- apply(bottom_output, 1, max)
+  bottom_output_blacked_out <- ifelse(
+    is_salient(bottom_output_max_prob),
+    bottom_output_max_prob,
+    0
+  )
+  bottom_output_upscaled <- bottom_output_blacked_out %>%
+    lapply(function(a) { array(a, c(instance_dim, 1)) }) %>%
+    abind::abind(along = 0)
+
+  final_discriminative_map <- top_output * bottom_output_upscaled
+
+  # listed <- lapply(seq(dim(final_discriminative_map)[]), function(x) final_discriminative_map[x,,,,])
+  reshaped <- final_discriminative_map %>%
+    listify(1) %>%
+    abind::abind(along = 3) %>%
+    array(c(16, 16, 16, 1))
+}
+
+
+
+
+
+
+
+
+
