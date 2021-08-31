@@ -7,7 +7,8 @@
 build_DeepMedic(model_params)
 }
 \arguments{
-\item{model_params}{all 3 spatial dimensions of input shape must be even}
+\item{model_params}{all 3 spatial dimensions of input shape must be even; must
+also specify downsamp factor for downsampled pathway and kernel size of conv layers.}
 }
 \value{
 

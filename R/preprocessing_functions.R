@@ -7,18 +7,18 @@
 #' @export
 #'
 #' @examples
-resample_image <- function(data, scale_factor){
+resample_image <- function(data, target_dims=NULL, scale_factor=NULL){
   data_dims <- dim(data)[1:3]
+  if(!is.null(target_dims) & !is.null(scale_factor)){
+    stop("Cannot use both target dims and scale factor")
+  }
+  if(!is.null(scale_factor)){
   new_data_dims <- data_dims %/% scale_factor
-  # for(d in 1:length(new_data_dims)){
-  #   if(new_data_dims[d] %% 2 != 0){
-  #     new_data_dims[d] <- new_data_dims[d] + 1
-  #   }
-  #   else {
-  #     next
-  #   }
-  # }
   scales <- new_data_dims/data_dims
+  }
+  if(!is.null(target_dims)){
+    scales <- target_dims/data_dims
+  }
   nifti_data <- oro.nifti::nifti(data)
   rescaled_nii <- RNiftyReg::rescale(nifti_data, scales)
   rescaled_data <- oro.nifti::nii2oro(rescaled_nii)@.Data

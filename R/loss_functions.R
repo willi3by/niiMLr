@@ -28,8 +28,8 @@ dice_loss <- function(y_true, y_pred){
 jaccard_loss <- function(y_true, y_pred){
 
   K <- keras::backend()
-  intersection <- K$sum(K$abs(y_true * y_pred), axis=-1)
-  sum_ <- K$sum(K$abs(y_true) + K$abs(y_pred), axis=-1)
+  intersection <- K$sum(K$abs(y_true * y_pred), axis=-1L)
+  sum_ <- K$sum(K$abs(y_true) + K$abs(y_pred), axis=-1L)
   jac <- (intersection) / (sum_ - intersection)
   jac_loss <- 1-jac
   return(jac_loss)
