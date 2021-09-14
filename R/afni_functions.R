@@ -142,39 +142,57 @@ alline_image <- function(base_path ,in_file, out_file, reference_file, emask = N
   )
   run_afni_command(cmd)
 
-  cmd <- build_afni_cmd("3dAllineate", afni_opts = paste("-prefix",
-                                                         linux_out_file,
-                                                         "-source",
-                                                         linux_in_file,
-                                                         "-1Dmatrix_apply",
-                                                         paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"),
-                                                         "-master",
-                                                         linux_reference_file,
-                                                         "-overwrite"))
+
+
 
 
   run_afni_command(cmd)
   allined_image <- neurobase::readnii(out_file)
-
-  if(!is.null(emask)){
-    linux_emask <- adjust_image_path_windows(emask)
-    emask_out <- substr(emask, 1, nchar(emask)-4)
-    emask_out <- paste0(emask_out, "_allined.nii")
-    linux_emask_out <- adjust_image_path_windows(emask_out)
-    cmd <- build_afni_cmd("3dAllineate", afni_opts = paste("-prefix",
-                                                           linux_emask_out,
-                                                           "-source",
-                                                           linux_emask,
-                                                           "-1Dmatrix_apply",
-                                                           paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"),
-                                                           "-master",
-                                                           linux_reference_file,
-                                                           "-overwrite"))
-
-  }
-  run_afni_command(cmd)
   return(allined_image@.Data)
 
+}
+
+#' Title
+#'
+#' @param base_path Path to transform matrix
+#' @param in_file Mask file
+#' @param out_file Prefix for output
+#' @param reference_file Reference used to alline main image
+#' @param extra_alline_opts
+#' @param overwrite
+#'
+#' @return
+#' @export
+#'
+#' @examples
+alline_mask <- function(base_path ,in_file, out_file, reference_file, extra_alline_opts = NULL, overwrite = TRUE){
+  linux_in_file <- adjust_image_path_windows(in_file)
+  linux_out_file <- adjust_image_path_windows(out_file)
+  linux_reference_file <- adjust_image_path_windows(reference_file)
+
+  cmd <- build_afni_cmd("3drefit", afni_opts = paste("-deoblique", linux_in_file))
+  run_afni_command(cmd)
+
+  cmd <- build_afni_cmd("3dCM", afni_opts = paste("-set",
+                                                  "0 0 0",
+                                                  linux_in_file))
+  run_afni_command(cmd)
+  afni_opts = paste("-prefix",
+                    linux_out_file,
+                    "-source",
+                    linux_in_file,
+                    "-1Dmatrix_apply",
+                    paste0('/mnt/c/', base_path, "/subj2ref.aff.1D"),
+                    "-master",
+                    linux_reference_file,
+                    "-interp NN",
+                    "-overwrite")
+
+  if(!is.null(extra_alline_opts)){
+    afni_opts <- paste(afni_opts, extra_alline_opts)
+  }
+  cmd <- build_afni_cmd("3dAllineate", afni_opts = afni_opts)
+  run_afni_command(cmd)
 }
 
 #' Convert RGB image to grayscale.

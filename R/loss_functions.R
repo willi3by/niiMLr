@@ -26,10 +26,9 @@ dice_loss <- function(y_true, y_pred){
 #'
 #' @examples
 jaccard_loss <- function(y_true, y_pred){
-
-  K <- keras::backend()
-  intersection <- K$sum(K$abs(y_true * y_pred), axis=-1L)
-  sum_ <- K$sum(K$abs(y_true) + K$abs(y_pred), axis=-1L)
+  y_true <- keras::k_cast(y_true, tensorflow::tf$float32)
+  intersection <- keras::k_sum(keras::k_abs(y_true * y_pred), axis=-1L)
+  sum_ <- keras::k_sum(keras::k_abs(y_true) + keras::k_abs(y_pred), axis=-1L)
   jac <- (intersection) / (sum_ - intersection)
   jac_loss <- 1-jac
   return(jac_loss)

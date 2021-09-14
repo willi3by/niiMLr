@@ -1,14 +1,18 @@
 #' Function to build the DeepMedic Network from scratch so it can be customized
 #'
 #' @param model_params all 3 spatial dimensions of input shape must be even; must
-#' also specify downsamp factor for downsampled pathway and kernel size of conv layers.
+#' also specify downsamp factor for downsampled pathway and kernel size of conv layers
+#' Input size is contextual input size (largest patch before downsampling)
 #'
 #' @return
 #' @export
 #'
 #' @examples
 build_DeepMedic <- function(model_params){
-  input_path_1 <- keras::layer_input(shape=model_params$input_shape, name="input_path_1")
+  high_res_path_image_size <- c(((model_params$input_shape[1:2]/model_params$d_factor - 16)*model_params$d_factor+16),model_params$input_shape[3],1)
+  low_res_path_image_size <- c((model_params$input_shape[1:2]/3), model_params$input_shape[3],1)
+
+  input_path_1 <- keras::layer_input(shape=high_res_path_image_size, name="input_path_1")
   # input_shape_2 <- c((model_params$input_shape[1:3]%/%2+8), model_params$input_shape[4])
   # input_shape_2 <- c((model_params$input_shape[1:2]%/%2+
   #                       (model_params$kernel_size-1)*model_params$downsamp_factor),
@@ -19,7 +23,7 @@ build_DeepMedic <- function(model_params){
   #     input_shape_2[d] <- input_shape_2[d] - 1
   #   }
   # }
-  input_path_2 <- keras::layer_input(shape=model_params$input_shape_2, name="input_path_2")
+  input_path_2 <- keras::layer_input(shape=low_res_path_image_size, name="input_path_2")
 
   path_1 <- input_path_1 %>%
     keras::layer_conv_3d(filters = 30, kernel_size = c(3,3,1),
@@ -136,22 +140,22 @@ build_DeepMedic <- function(model_params){
     keras::layer_activation_parametric_relu() %>%
     keras::layer_batch_normalization() %>%
     keras::layer_spatial_dropout_3d(rate=0.02) %>%
-    keras::layer_upsampling_3d(size=c(2,2,4))
+    keras::layer_upsampling_3d(size=c(3,3,1))
 
 
-  path_1_shape <- path_1$get_shape()$as_list() %>%
-    unlist()
-  path_2_shape <- path_2$get_shape()$as_list() %>%
-    unlist()
-  shape_diff <- path_1_shape - path_2_shape
-  if(sum(shape_diff) > 0){
-    path_2 <- path_2 %>%
-      keras::layer_zero_padding_3d(padding = list(
-        list(shape_diff[1],0),
-        list(shape_diff[2],0),
-        list(shape_diff[3],0)
-      ))
-  }
+  # path_1_shape <- path_1$get_shape()$as_list() %>%
+  #   unlist()
+  # path_2_shape <- path_2$get_shape()$as_list() %>%
+  #   unlist()
+  # shape_diff <- path_1_shape - path_2_shape
+  # if(sum(shape_diff) > 0){
+  #   path_2 <- path_2 %>%
+  #     keras::layer_zero_padding_3d(padding = list(
+  #       list(shape_diff[1],0),
+  #       list(shape_diff[2],0),
+  #       list(shape_diff[3],0)
+  #     ))
+  # }
 
 concat_layer <- keras::layer_add(list(path_1, path_2))
 

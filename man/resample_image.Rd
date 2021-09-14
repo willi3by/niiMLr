@@ -4,7 +4,7 @@
 \alias{resample_image}
 \title{Resampling fn.}
 \usage{
-resample_image(data, scale_factor)
+resample_image(data, target_dims = NULL, scale_factor = NULL)
 }
 \arguments{
 \item{scale_factor}{}
